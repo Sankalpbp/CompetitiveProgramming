@@ -1,0 +1,6 @@
+bool checkNumber(int input[], int size, int x) {
+  if(size==0){
+      return false;
+  }
+    return (input[0]==x)||checkNumber(input+1, size-1,x);
+}

@@ -1,0 +1,18 @@
+
+int allIndexes(int input[], int size, int x, int output[]) {
+
+
+   static int i=0, s=0;
+
+
+    if(size==0){
+        return s;
+    }
+    
+    if(input[0]==x){
+        output[s]=i;
+        s++;
+    }
+    i++;
+    return allIndexes(input+1,size-1,x,output);
+}
