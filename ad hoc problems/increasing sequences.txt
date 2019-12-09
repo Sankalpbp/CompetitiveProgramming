@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+
+    int n,k,l;
+    cin>>n>>k>>l;
+    int arr[n];
+    int min= INT_MAX, max= INT_MIN;
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+        if(arr[i]<min){
+            min=arr[i];
+        }
+        if(arr[i]>max){
+            max=arr[i];
+        }
+    }
+    
+    int minCost=INT_MAX;
+    for(int emt=min;emt<=max;emt++){
+        int inc=0,dec=0;
+        for(int i=0;i<n;i++){
+            if(arr[i]>emt){
+                dec+= arr[i]-emt;
+            }
+            else{
+                inc+= emt-arr[i];
+            }
+        }
+        if(inc>=dec){
+            int cost= k*dec;
+            cost+= (inc-dec)*l;
+            if(cost<minCost){
+                minCost=cost;
+            }
+        }
+    }
+    cout<<minCost;
+    
+	// Write your code here
+}

@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+
+int main() {
+
+	// Write your code here
+    ll S,d;
+    cin>>S>>d;
+    string smallestNumber="";
+    int n=9;
+    S=S-1;
+    for(int i=0;i<d-1;i++){
+        
+        while(n>S){
+            n--;
+        }
+        
+        smallestNumber+= n+'0';
+        S=S-n;
+    }
+    smallestNumber+='1';
+    for(int i=smallestNumber.length()-1;i>=0;i--){
+     cout<<smallestNumber[i];   
+    }
+    
+}

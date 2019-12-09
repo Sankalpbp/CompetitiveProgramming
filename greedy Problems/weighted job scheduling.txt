@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+struct Job{
+    ll start,finish,profit;
+};
+bool compare(Job a, Job b){
+    return a.finish<b.finish;
+}
+int main()
+{
+    //Write your code here
+    ll n;
+    cin>>n;
+    
+    Job jobs[n];
+    for(ll i=0;i<n;i++){
+        cin>>jobs[i].start>>jobs[i].finish>>jobs[i].profit;
+    }
+    
+    sort(jobs, jobs+n, compare);
+    
+    ll *dp = new ll[n];
+    dp[0]= jobs[0].profit;
+    
+    for(ll i=1;i<n;i++){
+        ll val=jobs[i].profit;
+        
+        ll lastJob=-1;
+        ll start=0,end=i-1;
+        while(start<=end){
+            ll mid=(start+end)/2;
+            if(jobs[mid].finish <= jobs[i].start){
+                lastJob=mid;
+                start=mid+1;
+            }else{
+                end=mid-1;
+            }
+        }
+        
+        
+        if(lastJob!=-1){
+            val+=dp[lastJob];
+        }
+    
+        dp[i]= max(val,dp[i-1]);
+    }
+        ll ans= dp[n-1];
+        cout<<ans;
+        delete []dp;
+
+    return 0;
+}

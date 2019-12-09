@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+bool compare(ll a,ll b){
+    return a>b;
+}
+
+int main() {
+    
+    ll n;
+    cin>>n;
+    ll arr[n];
+    for(ll i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    sort(arr,arr+n,compare);
+    
+    ll finalA,finalB,finalC;
+    
+    ll maxP= INT_MIN;
+    
+    bool solution=false;
+    
+    for(ll i=0;i<n-2;i++){
+        if(arr[i]<= arr[i+1]+arr[i+2]){
+            solution= true;
+            ll perimeter = arr[i]+arr[i+1]+arr[i+2];
+            if(perimeter>maxP){
+                finalA= arr[i],finalB=arr[i+1],finalC=arr[i+2];
+                maxP=perimeter;
+            }
+            else if(perimeter==maxP){
+                if(arr[i]>finalA){
+                   finalA= arr[i],finalB=arr[i+1],finalC=arr[i+2];
+                }
+                else if(arr[i]==finalA){
+                    if(arr[i+2]>finalC){
+                        finalA= arr[i],finalB=arr[i+1],finalC=arr[i+2];
+                    }
+                }
+            }
+        }
+    }
+    
+    if(!solution)
+        cout<<-1;
+    else{
+        cout<<finalC<<" "<<finalB<<" "<<finalA;
+    }
+}
+
+
+
+
