@@ -1,0 +1,34 @@
+ 	#include<bits/stdc++.h>
+	void PairSum(int *input, int n) {	 
+		
+	/* Don't write main().
+     	* the input array is already passed as function argument.
+     	* Don't need to return anything. Print the desired pairs in the function itself.
+     	*/
+     	
+        
+        map<int,int>m;
+        
+        for(int i=0;i<n;i++){
+            m[input[i]]++;
+        }
+        
+        map<int,int>::iterator itr;
+        map<int,int>::iterator partner;
+        
+        for(itr=m.begin();itr!=m.end();itr++){
+            if(itr->first>=0){
+                break;
+            }
+            partner= m.find(-1* (itr->first));
+            if(partner!=m.end()){
+                int count= (partner->second) * (itr->second);
+                while(count--){
+                    cout<<itr->first<<" "<<partner->first<<"\n";
+                }
+            }
+        }
+        
+     	
+ 	}
+
