@@ -1,46 +1,56 @@
-#include <bits/stdc++.h>
-using namespace std;
+import java.util.*;
 
-vector<int> longestConsecutiveIncreasingSequence(int *arr, int n){
-	
-    
-    unordered_set<int>s; 
-    vector<int>r1;
-    r1.push_back(arr[0]);
-     
-    for(int i=0;i<n;i++){
-        s.insert(arr[i]);
-    }
-    if(n==1){
-        vector<int>result;
-        result.push_back(arr[0]);
-        return result;
-    }
-   
-    for (int i=0; i<n; i++) 
-    { 
+public class Solution {
+	public static ArrayList<Integer> longestConsecutiveIncreasingSequence(int[] arr) {
+		//Your Code goes here
         
-        if (m.find(arr[i]-1) == m.end()) 
-        { 
-            int j = arr[i]; 
-            it = m.find(arr[i]);
-            
-            vector<int>r2;
-            while (m.find(j) != m.end()){
-                 r2.add(j);
-                 j++; 
-            }
-  
-                if(r2.size()>r1.size()){
-                    for(int i=)
+        ArrayList<Integer> arrli= new ArrayList<Integer>();
+        
+        arrli.add(arr[0]);
+        
+        HashSet <Integer> hs= new HashSet <Integer>();
+        
+        for(int i=0; i< arr.length;i++){
+            hs.add(arr[i]);
+        }
+            for(int i=0; i<arr.length;i++){
+                if(!hs.contains(arr[i]-1)){
+                    
+                    int j=arr[i];
+                    ArrayList<Integer>arrli2= new ArrayList<Integer>();
+                     while(hs.contains(j)){
+                            arrli2.add(j);
+                            j++;
+                     }
+                    
+                    if(arrli2.size()>arrli.size()){
+                        arrli=arrli2;
+                    }
+                    
                 }
-                
-        } 
-    } 
-    int init = arr2[first];
-    for(int i=0;i<ans;i++){
-        result.push_back(init+i);
-    }
-    return result; 
+         }
     
+        return arrli;
+	}
+}
+
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class Runner {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+
+		int n = s.nextInt();
+		int arr[] = new int[n];
+
+		for(int i = 0; i < n; i++) {
+			arr[i] = s.nextInt();
+		}
+
+		ArrayList<Integer> ans = Solution.longestConsecutiveIncreasingSequence(arr);
+		for(int num: ans) {
+			System.out.println(num);
+		}
+	}
 }
