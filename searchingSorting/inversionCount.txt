@@ -1,0 +1,51 @@
+long long merge(int A[], int l, int mid, int r){
+    
+    int temp[r-l+1];
+    long long c=0;;
+    int i=l, j=mid, k=0;
+    
+    while(i<mid && j<=r){
+        if(A[i]<=A[j]){
+            temp[k++]=A[i++];
+        }
+        else{
+            temp[k++]=A[j++];
+            c+= mid-i;
+        }
+    }
+    
+    while(i<mid){
+        temp[k++] = A[i++];
+    }
+    while(j<=r){
+        temp[k++] = A[j++];
+    }
+    
+    for(i=l, k=0; i <= r; i++,k++){
+        A[i]=temp[k];
+    }
+    return c;
+}
+
+long long mergeSort(int arr[], int l, int r) 
+{ 
+    long long count=0;
+    if (l < r) 
+    { 
+        int m = l+(r-l)/2; 
+        count+=mergeSort(arr, l, m); 
+        count+=mergeSort(arr, m+1, r); 
+        count+=merge(arr, l, m+1, r); 
+        return count;
+    } 
+    return count;
+} 
+
+
+long long solve(int A[], int n)
+{
+   
+	long long inversions= mergeSort(A,0,n-1);
+    
+    return inversions;
+}

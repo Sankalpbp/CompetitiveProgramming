@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+typedef long long ll;
+
+bool possible(ll boxes[], ll mid, ll n, ll k){
+    for(ll i=n-1; i>=0; i--){
+        if(boxes[i]>=mid){
+            k=k-boxes[i]/mid;
+            if(k<=0){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+    ll n,k;
+    cin>>n>>k;
+    ll boxes[n];
+        
+    ll end=0;
+    for(ll i=0; i<n; i++){
+        cin>>boxes[i];
+        end= max(end,boxes[i]);
+    }
+    ll ans=-1;
+
+    ll start=0;
+    ll mid;
+    while(start<=end){
+        mid= (start+end)/2;
+        if(possible(boxes,mid,n,k)){
+            ans=mid;
+            start=mid+1;
+        }else{
+            end=mid-1;
+        }
+    }
+    cout<<ans<<"\n";
+    }
+    return 0;
+}
+
+

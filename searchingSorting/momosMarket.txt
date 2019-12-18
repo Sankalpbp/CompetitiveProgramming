@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+
+ll search(ll array[], ll start, ll end, ll val) {
+
+   if( start==end )
+      return array[start] <=val ? start: -1;
+
+   ll mid = start + (end-start) / 2;
+
+   if( val < array[mid] )
+      return search( array, start, mid, val );
+
+   ll ret = search( array, mid+1, end, val );
+    
+   return ret == -1 ? mid : ret;
+}
+
+int main(){
+    
+    ll n;
+    cin>>n;
+    ll arr[n];
+    for(ll i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    ll days;
+    cin>>days;
+    
+    ll money[days];
+    
+    for(ll i=0;i<days;i++){
+        cin>>money[i];
+    }
+    
+    for(ll i=1;i<n;i++){
+        arr[i]+=arr[i-1];
+    }
+    ll rem;
+    ll momos;
+    
+    ll index;
+    
+    for(ll i=0; i<days; i++){
+        if(money[i]>=arr[n-1]){
+            index=n-1;
+        }
+        else{
+            index= search(arr,0,n-1,money[i]);
+        }
+        if(index==-1){
+            rem=money[i];
+        }
+        else{
+            rem= money[i]-arr[index];
+        }
+        momos= (index+1);
+        cout<<momos<<" "<<rem<<"\n";
+    }
+}
+    
+    
+    
+    
