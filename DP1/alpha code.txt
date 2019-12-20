@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+
+#define modval 1000000007
+
+using namespace std;
+
+int num_codes(string input, int size){
+    int *output= new int[size];
+   
+    output[0]=1;
+    output[1]=1;
+
+    for(int i=2;i<size;i++){
+        
+        output[i] = 0; 
+  
+        if (input[i-1] > '0') 
+            output[i] = output[i-1]; 
+  
+        if (input[i-2] == '1' || (input[i-2] == '2' && input[i-1] < '7') ) 
+            output[i]=(output[i]%modval + output[i-2]%modval)%modval; 
+        
+    }
+    
+    int ans= output[size-1]%modval;
+    delete[] output;
+    return ans%modval;
+}
+
+int main()
+{
+        string line;
+        vector<string> v;
+
+        while(getline(cin, line)){
+            if (line.empty()){
+                break;
+            }
+            v.push_back(line);
+        }
+
+        vector<string>::iterator it;
+
+        for (it = v.begin(); it != v.end()-1; it++){
+            string num= *it;
+            int ans= num_codes(num, num.length());
+            cout<<ans<<"\n";
+        }
+ 
+        
+
+    return 0;
+}

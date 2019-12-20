@@ -1,0 +1,40 @@
+using namespace std;
+
+int getMin(int *arr, int n){
+  
+    long long *dp= new long long[n];
+    dp[0]=1;
+    
+    //going left
+    
+    for(long long i=1;i<n;i++){
+        if(arr[i]>arr[i-1]){
+            dp[i]=dp[i-1]+1;
+        }
+        else{
+            dp[i]=1;
+        }
+    }
+  
+    //going right
+        cout<<"\n";
+
+    for(long long i=n-2;i>=0;i--){
+        if(arr[i]>arr[i+1]&& dp[i]<=dp[i+1]){
+            dp[i]=1+dp[i+1];
+        }
+    }
+    
+    
+    // calculate sum
+    
+    int sum=0;
+    for(long long i=0;i<n;i++){
+        sum+=dp[i];
+    }
+    
+    
+    return sum;
+        
+        
+}

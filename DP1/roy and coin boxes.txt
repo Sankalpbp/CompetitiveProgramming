@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+	long n;
+	cin>>n;
+	long* arr = new long[n+1];
+	memset(arr,0,sizeof(long)*(n+1));
+	long m;
+	cin>>m;
+	for(long i=0;i<m;i++){
+		long l,r;
+		cin>>l>>r;
+		arr[l-1]++;
+		arr[r]--;
+	}
+	long* fin_arr=new long[n];
+	long res=0;
+	for(long i=0;i<n;i++){
+		fin_arr[i]=res+arr[i];
+		res=fin_arr[i];
+	}
+	int freq[1000001];
+	memset(freq, 0, sizeof(freq));
+	for(long i=0;i<n;i++){
+		freq[fin_arr[i]]++;
+	}
+	int exact[1000001];
+	memset(exact, 0, sizeof(exact));
+	exact[1000000]=freq[1000000];
+	for(long i=1000000-1;i>=0;i--){
+		exact[i]=exact[i+1]+freq[i];
+	}
+	long q;
+	cin>>q;
+	while(q--){
+		long x;
+		cin>>x;
+		cout<<exact[x]<<endl;
+		
+	}
+}

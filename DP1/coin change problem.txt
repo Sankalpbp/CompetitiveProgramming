@@ -1,0 +1,39 @@
+int coin_change(int ** arr, int d[], int numD, int n){
+    
+   if(n==0){
+       return 1;
+   }
+   if(n<0){
+       return 0;
+   }
+   if(numD==0){
+       return 0;
+   }
+   if(arr[n][numD]>-1)
+       return arr[n][numD];
+    
+   int first= coin_change(arr,d,numD,n-d[0]);
+   int second= coin_change(arr,d+1,numD-1,n);
+    arr[n][numD]= first+second;
+    return first+second;
+}
+
+
+int countWaysToMakeChange(int denominations[], int numDenominations, int value){
+
+    int a= value+1, b= numDenominations+1;
+    
+    int **arr= new int*[a];
+    for(int i=0;i<a;i++){
+        arr[i]= new int[b];
+    }
+    
+    for(int i=0;i<a; i++){
+        for(int j=0;j<b; j++){
+            arr[i][j]= -1;
+        }
+    }
+    
+    return coin_change(arr, denominations, numDenominations, value);
+ 
+}
