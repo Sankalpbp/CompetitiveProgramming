@@ -1,0 +1,138 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+typedef long long ll;
+
+struct tNode{
+    
+    ll odds;
+    ll evens;
+    
+};
+
+void buildTree(ll* arr, tNode* tree, ll start, ll end, ll treeNode){
+    if(start==end){
+        if(arr[start]%2==0){
+            tree[treeNode].evens=1;
+            tree[treeNode].odds=0;
+        }else{
+             tree[treeNode].evens=0;
+             tree[treeNode].odds=1;
+        }
+        
+        return;
+    }
+    
+    ll mid= (start+end)/2;
+    buildTree(arr, tree, start, mid, 2*treeNode);
+    buildTree(arr, tree,mid+1, end, 2*treeNode+1);
+    
+    tree[treeNode].evens= tree[2*treeNode].evens+ tree[2*treeNode+1].evens;
+    tree[treeNode].odds= tree[2*treeNode].odds+ tree[2*treeNode+1].odds;
+    
+}
+
+void update(ll *arr, tNode* tree, ll start, ll end, ll treeNode, ll idx, ll val){
+    if(start==end){
+        arr[idx]=val;
+        
+        if(val%2==0){
+            tree[treeNode].evens=1;
+            tree[treeNode].odds=0;
+        }else{
+             tree[treeNode].evens=0;
+             tree[treeNode].odds=1;
+        }
+        return;
+    }
+    
+    ll mid= (start+end)/2;
+    if(idx>mid){
+        update(arr,tree,mid+1,end, 2*treeNode+1,idx,val);
+    }else{
+        update(arr,tree,start,mid,2*treeNode,idx,val);
+    }
+    tree[treeNode].evens= tree[2*treeNode].evens+ tree[2*treeNode+1].evens;
+    tree[treeNode].odds= tree[2*treeNode].odds+ tree[2*treeNode+1].odds;
+    
+}
+ll queryEven(tNode* tree, ll start, ll end, ll treeNode, ll left, ll right){
+    
+    if(left>end || right<start){
+        return 0;
+    }
+    if(start>=left && end<=right){
+        return tree[treeNode].evens;
+    }
+    
+    ll mid= (start+end)/2;
+    
+    ll ans1= queryEven(tree,start,mid,2*treeNode,left,right);
+    ll ans2= queryEven(tree,mid+1,end,2*treeNode+1,left,right);
+    
+    return ans1+ans2;
+    
+}
+ll queryOdd(tNode* tree, ll start, ll end, ll treeNode, ll left, ll right){
+    
+    if(left>end || right<start){
+        return 0;
+    }
+    if(start>=left && end<=right){
+        return tree[treeNode].odds;
+    }
+    
+    ll mid= (start+end)/2;
+    
+    ll ans1= queryOdd(tree,start,mid,2*treeNode,left,right);
+    ll ans2= queryOdd(tree,mid+1,end,2*treeNode+1,left,right);
+    
+    return ans1+ans2;
+    
+}
+
+int main() {
+
+	// Write your code here
+    ll n;
+    cin>>n;
+  
+    ll arr[n];
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    
+ 
+    
+    tNode* tree= new tNode[3*n]();
+
+    buildTree(arr,tree,0,n-1,1);
+    
+ 
+    ll x, y;
+    int type;
+    ll q;
+    cin>>q;
+    while(q--){
+        cin>>type>>x>>y;
+        if(type==0){
+            update(arr,tree,0,n-1,1,x-1,y);
+        }else
+        if(type==1){
+            int ans1=queryEven(tree,0,n-1,1,x-1,y-1);
+            cout<<ans1<<"\n";
+        }else if(type==2){
+            int ans2=queryOdd(tree,0,n-1,1,x-1,y-1);
+            cout<<ans2<<"\n";
+        }
+    }
+    
+}
+
+
+
+
+
+
+

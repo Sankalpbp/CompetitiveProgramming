@@ -1,0 +1,104 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+    int l;
+    int r;
+    int o;
+};
+void b(int* arr1,int* arr2,int s,int e,node* tree,int treenode){
+    if(s==e){
+            tree[treenode].l=s+1;
+            tree[treenode].r=arr1[s];
+            tree[treenode].o=arr2[s];
+        return;
+    }
+    int mid=(s+e)/2;
+    b(arr1,arr2,s,mid,tree,treenode*2);
+    b(arr1,arr2,mid+1,e,tree,treenode*2+1);
+    
+    if(tree[treenode*2].r>tree[treenode*2+1].r){     //if A value of left > A value of right
+        tree[treenode].l=tree[treenode*2].l;
+        tree[treenode].r=tree[treenode*2].r;
+        tree[treenode].o=tree[treenode*2].o;
+    } 
+   else if(tree[treenode*2].r<tree[treenode*2+1].r){   //if A value of left < A value of right
+        tree[treenode].l=tree[treenode*2+1].l;
+        tree[treenode].r=tree[treenode*2+1].r;
+        tree[treenode].o=tree[treenode*2+1].o;
+    } 
+   else if(tree[treenode*2].r==tree[treenode*2+1].r&&tree[treenode*2].o>tree[treenode*2+1].o){   //if A left == A right and if B value of left > A value of right
+        tree[treenode].l=tree[treenode*2+1].l;
+        tree[treenode].r=tree[treenode*2+1].r;
+        tree[treenode].o=tree[treenode*2+1].o;
+    }
+   else if(tree[treenode*2].r==tree[treenode*2+1].r&&tree[treenode*2].o<tree[treenode*2+1].o){    //if A left == A right and if B value of left < A value of right
+        tree[treenode].l=tree[treenode*2+1].l;
+        tree[treenode].l=tree[treenode*2].l;
+        tree[treenode].r=tree[treenode*2].r;
+        tree[treenode].o=tree[treenode*2].o;
+    }
+    else if(tree[treenode*2].l>tree[treenode*2+1].l){               // index of left is lesser than right
+        tree[treenode].l=tree[treenode*2+1].l;
+        tree[treenode].r=tree[treenode*2+1].r;
+        tree[treenode].o=tree[treenode*2+1].o;
+    }
+    else{                                                           // index of right is greater than left
+        tree[treenode].l=tree[treenode*2].l;
+        tree[treenode].r=tree[treenode*2].r;
+        tree[treenode].o=tree[treenode*2].o;
+    }
+}
+node a(node* tree,int s,int e,int l,int r,int treenode){
+    if(l>e||s>r){
+        node ans;
+        ans.l=0;
+        ans.r=0;
+        ans.o=0;
+        return ans;
+    }
+    if(s>=l&&e<=r){
+        node ans;
+        ans.l=tree[treenode].l;
+        ans.r=tree[treenode].r;
+        ans.o=tree[treenode].o;
+        return ans;
+    }
+    int mid=(s+e)/2;
+    node ans1=a(tree,s,mid,l,r,treenode*2);
+    node ans2=a(tree,mid+1,e, l,r,treenode*2+1);
+    node ans;
+    if(ans1.r>ans2.r)
+        ans=ans1;
+    else if(ans1.r<ans2.r)
+        ans=ans2;
+    else if(ans1.r==ans2.r&&ans1.o>ans2.o)
+        ans=ans2;
+    else if(ans1.r==ans2.r&&ans1.o<ans2.o)
+        ans=ans1;
+    else if(ans1.l>ans2.l)
+        ans=ans2;
+    else 
+        ans=ans1;
+    return ans;
+}
+int main() {
+    int n;
+    cin>>n;
+    int* arr1=new int[n]();
+    int* arr2=new int[n]();
+    for(int i=0;i<n;i++)
+        cin>>arr1[i];
+    for(int i=0;i<n;i++)
+        cin>>arr2[i];
+    node* tree=new node[4*n]();
+    b(arr1,arr2,0,n-1,tree,1);
+    int q;
+    cin>>q;
+    while(q--){
+       int l,r;
+        cin>>l>>r;
+        node ans=a(tree,0,n-1,l-1,r-1,1);
+        cout<<ans.l<<endl;
+    }
+  return 0;
+}
