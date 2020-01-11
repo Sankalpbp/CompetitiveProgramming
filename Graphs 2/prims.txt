@@ -1,0 +1,95 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int findMin(int* weight, bool* visited, int n){
+    
+    int min=INT_MAX;
+    int minIndex=0;
+    for(int i=0;i<n;i++){
+        if(!visited[i] && weight[i]<min ){
+            min=weight[i];
+            minIndex=i;
+        }
+    }
+    
+    return minIndex;
+    
+}
+
+int main()
+{
+  int V, E, tempX, tempY;
+  cin >> V >> E;
+
+  int n=V;
+  
+    int **edges= new int*[n];
+    for(int i=0;i<n;i++){
+        edges[i]= new int[n];
+        for(int j=0;j<n;j++){
+            edges[i][j]=0;
+        }
+    }
+    
+    int s,f,w;
+    
+    for(int i=0;i<E;i++){
+        cin>>s>>f>>w;
+        edges[s][f]=w;
+        edges[f][s]=w;
+    }
+    
+    bool *visited= new bool[n];
+    
+    for(int i=0;i<n;i++){
+        visited[i]=false;
+    }
+
+    int *parent= new int[n];
+    for(int i=0;i<n;i++){
+        parent[i]=-1;
+    }
+    parent[0]=0;
+    
+    int *weight= new int[n];
+    for(int i=0;i<n;i++){
+        weight[i]=INT_MAX;
+    }
+    weight[0]=0;
+    
+    int count=0;
+    
+    while(count<n-1){
+        
+        int currV= findMin(weight,visited,n);
+        visited[currV]=true;
+        for(int i=0;i<n;i++){
+            if(!visited[i] && edges[i][currV]){
+                if(weight[i]>edges[i][currV]){
+                    weight[i]=edges[i][currV];
+                    parent[i]=currV;
+                }
+            }
+        }
+        
+        count++;
+    }
+    
+    for(int i=1;i<n;i++){
+        if(i<parent[i])
+           cout<<i<<" "<<parent[i]<<" "<<weight[i]<<"\n";
+        else
+           cout<<parent[i]<<" "<<i<<" "<<weight[i]<<"\n";
+    }
+    
+  return 0;
+}
+
+
+
+
+
+
+
+

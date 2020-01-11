@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int getMin(int *dist, bool *visited, int n){
+    
+    int min=-1;
+    
+    for(int i=0;i<n;i++){
+        if(!visited[i] && (min==-1 || dist[i]<dist[min])){
+            min=i;
+        }
+    }
+    return min;
+    
+}
+
+int main()
+{
+  int V, E, tempX, tempY;
+  cin >> V >> E;
+  
+  int n=V;
+  int **edges= new int*[n];
+    for(int i=0;i<n;i++){
+        edges[i]=new int[n];
+        for(int j=0;j<n;j++){
+            edges[i][j]=0;
+        }
+    }
+
+    int s,f,w;
+    
+    for(int i=0;i<E;i++){
+        cin>>s>>f>>w;
+        edges[s][f]=w;
+        edges[f][s]=w;
+    }
+    int *dist= new int[n];
+    for(int i=0;i<n;i++){
+        dist[i]=INT_MAX;
+    }
+    dist[0]=0;
+    
+    bool *visited= new bool[n];
+    for(int i=0;i<n;i++){
+        visited[i]=false;
+    }
+    
+    int count=0;
+    
+    while(count<n-1){
+        
+        int currV= getMin(dist,visited,n);
+        visited[currV]=true;
+        for(int i=0;i<n;i++){
+            if(!visited[i] && edges[currV][i]){
+                if(dist[i] > dist[currV]+edges[i][currV]){
+                    dist[i] = dist[currV]+edges[i][currV];
+                }
+            }
+        }
+        count++;
+    }
+    
+    for(int i=0;i<n;i++){
+        cout<<i<<" "<<dist[i]<<"\n";
+    }
+    
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+

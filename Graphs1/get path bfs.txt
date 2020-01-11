@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void BFS(int **edges, int s, int d,int n, bool* visited, map<int,int>&m){
+    
+    queue<int>q;
+    
+    q.push(s);
+    visited[s]=true;
+    int curr;
+    while(!q.empty()){
+        curr=q.front();
+        if(curr==d){
+            break;
+        }
+        q.pop();
+        
+        for(int i=0;i<n;i++){
+          if(edges[curr][i] && !visited[i]){
+              visited[i]=true;
+              q.push(i);
+              m[i]=curr;
+           }
+        }
+    }
+    
+    if(curr==d){
+        int v=d;
+        while(v!=s){
+            cout<<v<<" ";
+            v=m[v];
+        }
+        cout<<s;
+    }
+    
+    
+    
+}
+
+
+int main()
+{
+  int V, E, tempX, tempY;
+  cin >> V >> E;
+
+   int n=V;
+    
+  int** edges= new int*[n];
+    
+    for(int i=0;i<n;i++){
+        
+        edges[i]= new int[n];
+        for(int j=0;j<n;j++){
+            edges[i][j]=0;
+        }
+        
+    }
+    int s,f;
+    for(int i=0;i<E;i++){
+        cin>>s>>f;
+        
+        edges[s][f]=1;
+        edges[f][s]=1;
+    }
+    
+    cin>>tempX>>tempY;
+    
+    bool *visited= new bool[n];
+    
+    for(int i=0;i<n;i++){
+        visited[i]=false;
+    }
+    
+    map<int,int>m;
+    BFS(edges,tempX,tempY,n,visited,m);
+    
+
+  return 0;
+}
