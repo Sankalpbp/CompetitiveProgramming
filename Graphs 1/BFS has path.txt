@@ -1,0 +1,85 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+
+bool BFS(int** edges, bool* visited, int n, int v1,int v2){
+ 
+    queue<int>q;
+    q.push(v1);
+    visited[v1]=true;
+    int curr;
+
+    while(!q.empty()){
+        curr= q.front();
+        q.pop();
+        if(curr==v2){
+            return true;
+        }
+
+        for(int i=0;i<n;i++){
+            if(curr==i){
+                continue;
+            }
+            if(edges[i][curr] && !visited[i]){
+                visited[i]=true;
+                q.push(i);
+            }
+        }
+
+    }
+    return false;
+}
+
+int main() {
+    int V, E;
+    cin >> V >> E;
+
+  /*
+
+  	   Write Your Code Here
+	   Complete the Rest of the Program
+	   You have to take input and print the output yourself
+
+  */
+    
+    int n=V;
+    int** edges= new int*[n];
+    for(int i=0;i<n;i++){
+        edges[i]= new int[n];
+        for(int j=0;j<n;j++){
+            edges[i][j]=0;
+        }
+    }
+
+
+    int s,f;
+    for(int i=0;i<E;i++){
+        cin>>s>>f;
+        edges[s][f]=1;
+        edges[f][s]=1;
+    }
+    
+    int v1,v2;
+    cin>>v1>>v2;
+    
+
+    bool *visited= new bool[n];
+    for(int i=0;i<n;i++){
+        visited[i]=false;
+    }
+    bool answer= BFS(edges,visited,n,v1,v2);
+   
+  if(answer){
+      cout<<"true";
+  }else{
+      cout<<"false";
+  }
+
+  return 0;
+}
+
+
+
+
+
+

@@ -1,0 +1,74 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void bfs(int** edges, bool* visited, int n, int start){
+    
+    vector<int>result;
+    
+    queue<int>q;
+    q.push(start);
+    visited[start]=true;
+    int curr;
+
+    while(!q.empty()){
+        curr= q.front();
+        q.pop();
+        result.push_back(curr);
+
+        for(int i=0;i<n;i++){
+            if(curr==i){
+                continue;
+            }
+            if(edges[i][curr] && !visited[i]){
+                visited[i]=true;
+                q.push(i);
+            }
+        }
+
+    }
+    
+    sort(result.begin(), result.end());
+    
+    for(auto it= result.begin(); it!=result.end(); it++){
+        cout<<*it<<" ";
+    }
+    cout<<endl;
+}
+int main() {
+    int V, E;
+    cin >> V >> E;
+    int n=V;
+    
+    int** edges= new int*[n];
+    
+    for(int i=0;i<n;i++){
+        
+        edges[i]= new int[n];
+        for(int j=0;j<n;j++){
+            edges[i][j]=0;
+        }
+        
+    }
+    int s,f;
+    for(int i=0;i<E;i++){
+        cin>>s>>f;
+        
+        edges[s][f]=1;
+        edges[f][s]=1;
+    }
+    
+    bool* visited= new bool[n];
+    for(int i=0;i<n;i++){
+        visited[i]=false;
+    }
+    bfs(edges,visited,n,0);
+    
+    for(int i=0;i<n;i++){
+        if(!visited[i]){
+           bfs(edges,visited,n,i);
+        }
+    }
+
+    
+  return 0;
+}
