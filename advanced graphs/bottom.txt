@@ -1,0 +1,132 @@
+#include <iostream>
+#include<bits/stdc++.h>
+
+
+using namespace std;
+
+void dfs(vector<int>* edges, int start, bool* visited, stack<int> &finishStack) {
+    visited[start]= true;
+    for (int i = 0; i < edges[start].size(); i++) {
+        int adjacent = edges[start][i];
+        if (!visited[adjacent]) {
+            dfs(edges, adjacent, visited, finishStack);
+        }
+    }
+    finishStack.push(start);
+}
+
+void dfs2(vector<int>* edges, int start, unordered_set<int>* component, bool* visited) {
+    visited[start]= true;
+    component->insert(start);
+    for (int i = 0; i < edges[start].size(); i++) {
+        int adjacent = edges[start][i];
+        if (!visited[adjacent]) {
+            dfs2(edges, adjacent, component, visited);
+        }
+    }
+}
+
+unordered_set<unordered_set<int>*>* getSCC(vector<int>* edges, vector<int>* edgesT, int n) {
+    bool *visited= new bool[n]();
+
+    stack<int> finishedVertices;
+    for (int i = 0; i < n; i++) {
+        if (!visited[i]) {
+            dfs(edges, i, visited, finishedVertices);
+        }
+    }
+    unordered_set<unordered_set<int>*>* output = new unordered_set<unordered_set<int>*>();
+
+    visited= new bool[n]();
+
+    while (finishedVertices.size() != 0) {
+        int element = finishedVertices.top();
+        finishedVertices.pop();
+        if (!visited[element]) {
+            unordered_set<int>* component = new unordered_set<int>();
+            dfs2(edgesT, element, component, visited);
+            output->insert(component);
+            // continue;
+        }
+
+    }
+    return output;
+}
+
+int main() {
+    int n;
+    while(true){
+        cin >> n;
+        if(n==0){
+            break;
+        }
+        vector<int>* edges = new vector<int>[n];
+        vector<int>* edgesT = new vector<int>[n];
+        int m;
+        cin >> m;
+        for (int i = 0; i < m; i++) {
+            int j, k;
+            cin >> j >> k;
+            edges[j - 1].push_back(k - 1);
+            edgesT[k - 1].push_back(j - 1);
+        }
+        unordered_set<unordered_set<int>*>* components = getSCC(edges, edgesT, n);
+        unordered_set<unordered_set<int>*>::iterator it = components->begin();
+
+        
+
+        int count=0;   
+        bool flag;
+        vector<int>bottomElements;
+        while (it != components->end()) {
+            unordered_set<int>* component = *it;
+            unordered_set<int>::iterator it2 = component->begin();
+            flag=true;       // assuming current component to be set of bottom elements
+            while (it2 != component->end()) {
+                for(int i=0;i<edges[*it2].size();i++){    // if any vertex in a component has an edge to a vertex in another component, then mark it non- bottom
+                    int neighbour= edges[*it2][i];
+                    if(component->count(neighbour)==0){     //checking whether the neighbor is in same component or not
+                        flag=false;                         //if not, mark the component as not - bottom
+                        break;
+                    }else{                                    
+                        continue;
+                    }
+                    
+                }
+              ////// if we find even one element in the component whose neighbour doesnt exist in the same component we will have to discard the whole component.
+                if(flag==false)
+                    break;
+                it2++;
+            }
+          
+          	/////// the thing is either a component will have all elements as sinkk or there will be no sink at all
+          ///// if flag == false then entire component is discarded
+            if(flag==true){
+                unordered_set<int>::iterator it3 = component->begin();
+                while(it3!=component->end()){
+                    bottomElements.push_back((*it3)+1);
+                    it3++;
+                }
+                
+            }
+            
+            delete component;
+            it++;
+        }
+
+        sort(bottomElements.begin(), bottomElements.end());
+        for(auto it= bottomElements.begin();it!=bottomElements.end();it++){
+            cout<<(*it)<<" ";                                            
+        }
+        cout<<endl;
+
+        delete components;
+        delete [] edges;
+        delete [] edgesT;
+
+
+
+    }
+
+    return 0;
+}

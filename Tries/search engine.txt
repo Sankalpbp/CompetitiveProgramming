@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class trieNode{
+    public:
+	int weight;
+	trieNode** children;
+
+	trieNode(){
+		children= new trieNode*[26];
+		for(int i=0;i<26;i++){
+			children[i]= NULL;
+		}
+		weight=0;
+	}
+};
+
+void insert(string s, int weight, trieNode* root){
+
+	if(s.empty()){
+		return;
+	}
+
+	trieNode* child;
+
+	int index= s[0]-'a';
+
+	if(root->children[index]){
+		child= root->children[index];
+	}else{
+		child= new trieNode();
+		root->children[index]=child;
+	}
+
+	if(weight>root->weight){
+		root->weight=weight;
+	}
+
+	insert(s.substr(1),weight,child);
+
+}
+
+int searchBest(string s, trieNode* root){
+
+	int bestWeight= -1;
+	trieNode* current=root;
+
+
+	for(int i=0;i<s.length();i++){
+		int index= s[i]-'a';
+		trieNode* child= current->children[index];
+		if(child){
+			current=child;
+			bestWeight=child->weight;
+		}else{
+			return -1;
+		}
+	}
+
+return bestWeight;
+}
+
+
+
+int main()
+{
+    int n,q;
+    cin>>n>>q;
+    
+    string s;
+    int weight;
+    trieNode* root= new trieNode();
+    while(n--){
+        cin>>s>>weight;
+        insert(s,weight,root);
+    }
+    
+    string queryString;
+    while(q--){
+        cin>>queryString;
+        cout<<searchBest(queryString,root)<<endl;
+    }
+    return 0;
+}

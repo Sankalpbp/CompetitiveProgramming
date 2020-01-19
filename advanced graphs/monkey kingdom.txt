@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void dfs(vector<long long int>*edges, bool * visited, long long int start,long long int &count, long long int* bananas){
+    
+    visited[start]=true;
+    count+= bananas[start];
+    
+    for(int i=0;i<edges[start].size();i++){
+        long long int neighbour=  edges[start][i];
+        if(!visited[neighbour]){
+            dfs(edges,visited,neighbour,count, bananas);
+        }
+    }
+    
+}
+
+
+int main()
+{
+	//code
+    long long int t;
+    cin>>t;
+    
+    while(t--){
+        long long int n,m;
+        
+        cin>>n>>m;
+        
+        vector<long long int>*edges= new vector<long long int>[n];
+        
+        long long int s,f;
+        for(int i=0;i<m;i++){
+            cin>>s>>f;
+            edges[s-1].push_back(f-1);
+            edges[f-1].push_back(s-1);
+        }
+        
+        long long int *bananas= new long long int[n];
+        
+        for(int i=0;i<n;i++){
+            cin>>bananas[i];
+        }
+        
+        bool *visited= new bool[n];
+        
+        for(int i=0;i<n;i++){
+            visited[i]=false;
+        }
+        
+        long long int max= 0;
+        
+        for(int i=0;i<n;i++){
+            if(!visited[i]){
+                long long int count=0;
+                dfs(edges,visited,i,count,bananas);
+                
+                if(count>max){
+                    max=count;
+                }
+            }
+        }
+        cout<<max<<"\n";
+    }
+    
+	return 0;
+}

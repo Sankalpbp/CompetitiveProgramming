@@ -1,0 +1,50 @@
+typedef long long ll;
+
+
+// int countSetBits(ll n){
+    
+//     if(n==0)
+//         return 0;
+        
+//     return n&1 + countSetBits(n>>1);
+
+// }
+int countSetBits(ll mask, int n){
+    
+    int k = 0;
+		for(int j = 0; j < n; j++){
+			if(mask & (1 << j)){
+				k++;
+			}
+		}
+    return k;
+
+}
+
+ll solve(int like[][MAXN],int N)
+{
+	// Write your code here.
+    
+    ll *dp= new ll[1<<N];
+  
+        dp[0]=1;
+    
+    
+    for(ll mask=0; mask< (1<<N)-1; mask++){
+            
+        int k= countSetBits(mask,N);
+        
+        for(ll j=0;j<N;j++){
+            
+            if( !(mask & (1<<j))  && like[k][j]==1){
+                dp[mask|(1<<j)]+= dp[mask];
+            }
+        }
+        
+    }
+    
+    return dp[(1<<N)-1];
+    
+}
+
+

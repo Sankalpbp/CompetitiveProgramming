@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define modval 1000000007
+
+int getParent(int v,int* vertices){
+    while(vertices[v]!=v){
+        v=vertices[v];
+    }
+    return v;
+}
+
+int main()
+{
+	//code
+    
+    int t;
+    cin>>t;
+    int i = 1;
+    while(t--){
+        int n,m,a;
+        cin>>n>>m>>a;
+        
+        vector<pair<int,pair<int,int>>>* edges = new vector<pair<int,pair<int,int>>>();
+        
+        while(m--){
+            int v1,w1,c1;
+            cin>>v1>>w1>>c1;
+            
+            pair<int,pair<int,int>> p =make_pair(c1,make_pair(v1,w1));
+            edges->push_back(p);
+        }
+        
+        sort(edges->begin(),edges->end());
+        
+        int cost = 0;
+        int* parent = new int[n+1];    
+        for(int i=0;i<n+1;i++){
+            parent[i]=i;
+        }
+        
+        int total = n-1;
+        for(int i=0;i<edges->size();i++){
+            pair<int,pair<int,int>> p = edges->at(i);
+            int w = p.first;
+            int v1 = p.second.first;
+            int v2 = p.second.second;
+            
+            int p_v1 = getParent(v1,parent);
+            int p_v2 = getParent(v2,parent);
+            
+            if(p_v1!=p_v2 && w<a){
+                parent[p_v2]=p_v1;
+                cost=(cost%modval+w%modval)%modval;
+            }
+            
+            
+        }
+        
+        int tot_air = 0;
+        for(int i=1;i<=n;i++){
+            if(parent[i]==i){
+                tot_air++;
+            }
+        }
+        cost=(cost%modval+((tot_air%modval)*(a%modval))%modval)%modval;
+        cout<<"Case #"<<i<<": "<<cost<<" "<<tot_air<<endl;
+        i++;
+    }
+	return 0;
+}

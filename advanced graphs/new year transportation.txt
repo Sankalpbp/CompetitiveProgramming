@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void dfs(vector<int>*edges, bool *visited, int start){
+    
+    visited[start]=true;
+    
+    for(int i=0;i<edges[start].size(); i++){
+        int neighbour= edges[start][i];
+        if(!visited[neighbour]){
+            dfs(edges,visited,neighbour);
+        }
+    }
+    
+}
+
+int main()
+{
+	//code
+    
+    int n, destination;
+    cin>>n>>destination;
+    
+    int arr[n-1];
+    
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    
+    vector<int>*edges= new vector<int>[n];
+    
+    for(int i=0;i<n-1;i++){
+        edges[i].push_back( i +arr[i] );
+    }
+    
+    bool *visited= new bool[n];
+    
+    for(int i=0;i<n;i++){
+        visited[i]= false;
+    }
+    
+    dfs(edges,visited,0);
+    
+    if(visited[destination-1]==true){
+        cout<<"YES";
+    }else{
+        cout<<"NO";
+    }
+    
+    
+	return 0;
+}

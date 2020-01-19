@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+void dfs(vector<int>*edges,bool* visited,int start){
+    
+    visited[start]=true;
+
+    for(int i=0;i<edges[start].size();i++){
+        int neighbour= edges[start][i];
+        if(!visited[neighbour]){
+            dfs(edges,visited,neighbour);
+        }
+    }
+    
+}
+
+void topoSort(vector<int>*edges,bool* visited,int start,stack<int>&st){
+    
+    visited[start]=true;
+
+    for(int i=0;i<edges[start].size();i++){
+        int neighbour= edges[start][i];
+        if(!visited[neighbour]){
+            topoSort(edges,visited,neighbour,st);
+        }
+    }
+    
+    st.push(start);
+}
+
+int main() {
+    
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+	cin >> n;
+	vector<int>* edges = new vector<int>[n];
+	int m;
+	cin >> m;
+	for (int i = 0; i < m; i++) {
+		int j, k;
+		cin >> j >> k;
+		edges[j - 1].push_back(k - 1);
+	}
+        
+    stack<int>st;
+    bool* visited= new bool[n];
+    for(int i=0;i<n;i++){
+        visited[i]=false;
+    }
+	
+    for(int i=0;i<n;i++){
+        if(!visited[i]){
+            topoSort(edges,visited,i,st);
+        }
+    }    
+   
+    for(int i=0;i<n;i++){
+        visited[i]=false;
+    }
+        int callCount=0;
+        while(!st.empty()){
+            int start= st.top();
+            st.pop();
+            if(!visited[start]){
+                dfs(edges,visited,start);
+                callCount++;
+            }
+        }
+        cout<<callCount<<"\n";
+ }
+
+}
+
+
+
+
+

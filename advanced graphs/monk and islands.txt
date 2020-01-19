@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+void bfs(vector<ll>*edges, ll start, bool *visited, ll dest, ll* level){
+    
+    queue<ll>q;
+    q.push(start);
+    visited[start]=true;
+    while(!q.empty()){
+        
+        ll curr= q.front();
+        q.pop();
+        
+        for(ll i=0;i<edges[curr].size();i++){
+            ll neighbour= edges[curr][i];
+            if(!visited[neighbour]){
+                visited[neighbour]=true;
+                q.push(neighbour);
+                level[neighbour]= level[curr]+1;
+                if(neighbour==dest){
+                    return;
+                }
+            }
+        }
+        
+    }
+        
+}
+int main()
+{
+	//code
+    
+    ll t;
+    cin>>t;
+    ll n,m;
+    
+    while(t--){
+        cin>>n>>m;
+        vector<ll>*edges= new vector<ll>[n];
+        ll x,y;
+        for(ll i=0;i<m;i++){
+            cin>>x>>y;
+            edges[x-1].push_back(y-1);
+            edges[y-1].push_back(x-1);
+        }
+        
+        
+        ll *level= new ll[n];
+        
+        level[0]=0;
+        bool *visited= new bool[n];
+        for(ll i=0;i<n;i++){
+            visited[i]=false;
+        }
+        
+        bfs(edges,0,visited,n-1,level);
+        cout<<level[n-1]<<"\n";
+        
+    }
+    
+	return 0;
+}

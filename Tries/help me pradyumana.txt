@@ -1,0 +1,91 @@
+#include<bits/stdc++.h>
+#define MAX_SIZE 50
+
+using namespace std;
+
+struct trieNode{
+    bool isLeafNode;
+    trieNode* children[26];
+
+    trieNode(){
+        isLeafNode=false;
+        for(int i=0;i<26;i++){
+            children[i]=NULL;
+        }
+    }
+};
+void insert(trieNode* root, string word){
+
+    int index;
+    for(int i=0;word[i]!='\0';i++){
+        index= word[i]-'a';
+
+        if(!root->children[index]){
+            root->children[index]= new trieNode;
+        }
+        root=root->children[index];
+    }
+
+    root->isLeafNode=true;
+
+}
+void printAllWords(trieNode* root,string prefix, char* str,int index){
+
+    if(root->isLeafNode){
+        str[index]='\0';
+        string result= prefix+str;
+        cout<<result<<'\n';
+    }
+
+    for(int i=0;i<26;i++){
+        if(root->children[i]){
+            str[index]=i+'a';
+            printAllWords(root->children[i],prefix,str,index+1);
+        }
+    }
+
+}
+
+
+void searchPrefix(string s, trieNode* root){
+
+	trieNode*current= root;
+	for(int i=0;i<s.length();i++){
+		int index= s[i]-'a';
+
+		trieNode* child= current->children[index];
+
+		if(child){
+			current= child;
+		}else{
+            insert(root,s);
+            cout<<"No suggestions\n";
+			return;
+		}
+	}
+    char str[MAX_SIZE];
+    printAllWords(current,s,str,0);
+
+}
+
+
+int main()
+{
+    int n;
+    trieNode* root= new trieNode();
+    cin>>n;
+    string s;
+    while(n--){
+        cin>>s;
+        insert(root,s);
+    }
+
+    int q;
+    cin>>q;
+    while(q--){
+        string prefix;
+        cin>>prefix;
+        searchPrefix(prefix,root);
+    }
+    return 0;
+}
